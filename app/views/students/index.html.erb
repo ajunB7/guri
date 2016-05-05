@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<%= render 'students/horizontal-menus/months' %>
+
+<h1>Listing Students</h1>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th class="text-center">Name</th>
+      <th class="text-center">Fee</th>
+      <th class="text-center">Total Hours</th>
+      <th class="text-center">Total Fee</th>
+      <th class="text-center" colspan="4"> Actions </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @students.each do |student| %>
+      <tr align="center">
+        <td><%= student.name %></td>
+        <td>$<%= student.fee %></td>
+        <td><%= @hours[student.id] %></td>
+        <td>$<%= student.fee * @hours[student.id] %></td>
+         <td><%= link_to 'Add 1 Hour', add_hour_students_path(:student_id => student.id, :count => 1), :class => 'btn btn-success'%></td>
+        <td><%= link_to 'Show', student, :class => 'btn btn-primary'%></td>
+        <td><%= link_to 'Edit', edit_student_path(student), :class => 'btn btn-warning' %></td>
+        <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>$<%= @total_fee %></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Student', new_student_path %>
