@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     collection do
       get :add_hour
       get :delete_hour
+      get :show_summary
     end
   end
 

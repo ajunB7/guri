@@ -6,3 +6,20 @@ $ ->
 		if studentHours.innerText != "0"
 			studentHours.parentElement.style.backgroundColor = "#f2f7f4"
 
+jQuery ->
+	$('.attended-students').click ->
+		for studentHours in $(".today-hours")
+			if studentHours.innerText == "0"
+				studentHours.parentElement.className = "hidden"
+			else
+				studentHours.parentElement.className = ""
+	$('.absent-students').click ->
+		console.log "goes"
+		for studentHours in $(".today-hours")
+			if studentHours.innerText != "0"
+				studentHours.parentElement.className = "hidden"
+			else
+				studentHours.parentElement.className = ""
+	$('.all-students').click ->
+		for studentHours in $(".today-hours")
+			studentHours.parentElement.className = ""

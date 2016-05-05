@@ -23,7 +23,7 @@ class StudentsController < ApplicationController
     @month = params[:month] if (params[:month])
 
     common_days = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    @months_days = 29 if @month == 2 && Date.gregorian_leap?(year)
+    @months_days = 29 if @month == 2 && Date.gregorian_leap?(@year)
     @months_days = common_days[@month.to_i]
 
     if params[:day]
@@ -32,7 +32,7 @@ class StudentsController < ApplicationController
     end
 
     @students.each do |s|
-      s_hours = s.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') <= ?", @month, @year, @day)
+      s_hours = s.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year)
       hours_count = s_hours.sum(:count)
       hours_today_count = s_hours.where("date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", @day).sum(:count)
 
@@ -48,6 +48,29 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
+  end
+
+  def show_summary
+    @month = params[:month].to_i
+    @year = params[:year].to_i
+
+    common_days = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    @months_days = 29 if @month == 2 && Date.gregorian_leap?(@year)
+    @months_days = common_days[@month.to_i]
+
+    @students = Student.all
+    @hours = {}
+
+    @students.each do |s|
+      s_hours = s.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year)
+      s_hours.each do |hr|
+        @hours[s.id] ||= {}
+        @hours[s.id][hr.created_at.day] = hr.count
+        @hours[s.id][:total] ||= 0
+        @hours[s.id][:total] += hr.count
+      end
+    end
+
   end
 
   # GET /students/new
@@ -146,7 +169,11 @@ class StudentsController < ApplicationController
       @hour = @student.hours.find(params[:hour_id])
     elsif params[:student_id]
       student = Student.find(params[:student_id])
-      @hour = student.hours.last
+      if (params[:year] && params[:month] && params[:day])
+        @hour = student.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", params[:month], params[:year], params[:day]).first
+      else
+        @hour = student.hours.last
+      end
     end
 
     @hour.destroy

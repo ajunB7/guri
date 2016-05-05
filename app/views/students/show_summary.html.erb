@@ -1,0 +1,32 @@
+
+<h1 class="text-center">Monthly Summary <%= link_to 'Back', students_path, :class => 'btn btn-success' %></h1>
+
+<%= render 'students/horizontal-menus/months_summary' %>
+
+<table class="table table-hover table-striped table-bordered">
+	 <thead>
+      <tr>
+        <th class="text-center">Name</th>
+        <th class="text-center">Fee</th>
+        <% @months_days.times do |d| %>
+        	<th class="text-center"><%= d + 1 %></th>
+        <% end %>
+        <th class="text-center">Total</th>
+        <th class="text-center">Total Money</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @students.order("name").each do |student| %>
+        <tr align="center">
+          <td><%= student.name %></td>
+          <td><%= student.fee %></td>
+          	<% @months_days.times do |d| %>
+        		<td class="text-center"><%= @hours[student.id].nil? ? '' : @hours[student.id][d + 1] %></td>
+        	<% end %>
+        	<td class="text-center"><%= @hours[student.id].nil? ? 0 : @hours[student.id][:total] %></td>
+        	<td class="text-center">$<%= @hours[student.id].nil? ? 0 : @hours[student.id][:total] * student.fee %></td>
+         </tr>
+     	<% end %>
+     </tbody>
+</table>

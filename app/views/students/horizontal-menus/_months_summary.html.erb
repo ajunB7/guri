@@ -1,0 +1,23 @@
+<div class="container">
+	<div class="row" style="padding-top:10px">
+
+        <div class=" text-center">
+
+            <div class="list-group list-group-horizontal">
+
+                <% Date::MONTHNAMES[1..12].each_with_index do |m, i| %>
+                    <% i += 1 %>
+                    <% if (i == @month.to_i) %>
+                        <%= link_to m, show_summary_students_path(:month => i, :year => @year), :class => 'list-group-item active'%>
+                    <% elsif (i != @month.to_i and i == Time.now.month and @year = Time.now.year) %>
+                        <%= link_to m, show_summary_students_path(:month => i,:year => @year), :class => 'list-group-item list-group-item-info'%>
+                    <% else %>
+                        <%= link_to m, show_summary_students_path(:month => i, :year => @year), :class => 'list-group-item'%>
+                    <% end %>
+                <% end %>
+            </div>
+
+        </div>
+
+	</div>
+</div>
