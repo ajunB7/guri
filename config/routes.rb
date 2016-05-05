@@ -2,8 +2,11 @@ Rails.application.routes.draw do
   resources :students do
     collection do
       get :add_hour
+      get :delete_hour
     end
   end
+
+  root 'students#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

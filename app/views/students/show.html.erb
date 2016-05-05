@@ -1,14 +1,25 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @student.name %>
-</p>
+<h1>
+  <%= @student.name %> - $<%= @student.fee %>
+</h1>
 
-<p>
-  <strong>Fee:</strong>
-  <%= @student.fee %>
-</p>
+<table class="table table-bordered table-hover">
+	<thead>
+	    <tr>
+	      <th class="text-center">Hours</th>
+	      <th class="text-center">Date</th>
+	    </tr>
+  </thead>
+  <tbody>
+    <% @student.hours.order("created_at DESC").each do |hours| %>
+      <tr align="center">
+      	<td><%= hours.count %></td>
+        <td><%= hours.created_at.in_time_zone('Eastern Time (US & Canada)').strftime('%A, %b %d') %></td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>
 
-<%= link_to 'Edit', edit_student_path(@student) %> |
-<%= link_to 'Back', students_path %>
+<%= link_to 'Edit', edit_student_path(@student), :class => 'btn btn-warning' %>
+<%= link_to 'Back', students_path, :class => 'btn btn-primary'  %>
