@@ -4,8 +4,7 @@
 $ ->
 	for studentHours in $(".today-hours")
 		if studentHours.innerText != "0"
-			studentHours.parentElement.style.backgroundColor = "#f2f7f4"
-
+			studentHours.parentElement.style.backgroundColor = "#B4DCB3"
 jQuery ->
 	$('.attended-students').click ->
 		for studentHours in $(".today-hours")

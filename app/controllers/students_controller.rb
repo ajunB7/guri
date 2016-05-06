@@ -12,6 +12,7 @@ class StudentsController < ApplicationController
     @total_today_fee = 0
     @total_hours = 0
     @months_days = 0
+    @paidfees = {}
 
     @month = Time.now.month
     @year = Time.now.year
@@ -35,6 +36,11 @@ class StudentsController < ApplicationController
       s_hours = s.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year)
       hours_count = s_hours.sum(:count)
       hours_today_count = s_hours.where("date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", @day).sum(:count)
+
+      s_paidfees = s.paidfees.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year).first
+      unless s_paidfees.nil?
+        @paidfees[s.id] = true
+      end
 
       @today_hours[s.id] = hours_today_count
       @total_today_hours += hours_today_count
@@ -85,43 +91,36 @@ class StudentsController < ApplicationController
   def add_hour
     @student = Student.find(params[:student_id])
 
-    month = Time.now.month
-    day = Time.now.day
-    year = Time.now.year
+    @month = Time.now.month
+    @day = Time.now.day
+    @year = Time.now.year
 
     if (params[:month] and params[:day] and params[:year])
-      month = params[:month]
-      day = params[:day]
-      year = params[:year]
+      @month = params[:month]
+      @day = params[:day]
+      @year = params[:year]
 
       # Make it at 15 pm just to be safe (UTC conversion)
-      date = "#{month}/#{day}/#{year} 15:0:0"
+      date = "#{@month}/#{@day}/#{@year} 15:0:0"
       @create_date = DateTime.strptime(date, "%m/%d/%Y %H:%M:%S")
     end
 
-  student_history = @student.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", month, year, day)
-   if student_history.empty?
-    @hour = @student.hours.new(:count => params[:count])
-  else
-    @hour = student_history.first
-    @hour.update_attributes(:count => @hour.count + 1)
-  end
-
-    respond_to do |format|
-      if @hour.save
-        if (@create_date)
-          @hour.update_attributes(:created_at => @create_date)
-          params = {:year => year, :month => month, :day => day}
-        end
-        format.html { redirect_to action: "index", params: params, notice: 'Hour was added successfully.' }
-        format.json { render :show, status: :created, location: @student }
-      else
-        format.html { render :new }
-        format.json { render json: @student.errors, status: :unprocessable_entity }
-      end
+    student_history = @student.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year, @day)
+     if student_history.empty?
+      @hour = @student.hours.new(:count => params[:count])
+    else
+      @hour = student_history.first
+      @hour.update_attributes(:count => @hour.count + 1)
     end
 
-
+    if @hour.save
+      if (@create_date)
+        @hour.update_attributes(:created_at => @create_date)
+        params = {:year => @year, :month => @month, :day => @day}
+        end
+    else
+      @error = "Failed To add Hour!"
+    end
   end
 
   # POST /students
@@ -140,6 +139,41 @@ class StudentsController < ApplicationController
     end
   end
 
+  def paid_money
+    @student = Student.find(params[:student_id])
+    @month = params[:month].to_i
+    @year = params[:year].to_i
+
+    if (params[:month] and params[:year])
+      @month = params[:month]
+      day = 1
+      @year = params[:year]
+
+      # Make it at 15 pm just to be safe (UTC conversion)
+      date = "#{@month}/#{day}/#{@year} 15:0:0"
+      @create_date = DateTime.strptime(date, "%m/%d/%Y %H:%M:%S")
+    end
+
+    fee = @student.paidfees.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year)
+
+    if fee.empty?
+      s = @student.paidfees.create
+      s.update_attributes(:created_at => @create_date)
+    else
+      # Do nothing
+    end
+  end
+
+  def unpaid_money
+    @student = Student.find(params[:student_id])
+    @month = params[:month].to_i
+    @year = params[:year].to_i
+
+    fee = @student.paidfees.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year)
+    unless fee.empty?
+      fee.first.destroy
+    end
+  end
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
@@ -166,21 +200,21 @@ class StudentsController < ApplicationController
 
   def delete_hour
     if params[:hour_id]
-      @hour = @student.hours.find(params[:hour_id])
+      @hour = Hour.find(params[:hour_id])
     elsif params[:student_id]
-      student = Student.find(params[:student_id])
+      @student = Student.find(params[:student_id])
       if (params[:year] && params[:month] && params[:day])
-        @hour = student.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", params[:month], params[:year], params[:day]).first
+        @month = params[:month].to_i
+        @year = params[:year].to_i
+        @day = params[:day].to_i
+        @hour = @student.hours.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ?", params[:month], params[:year], params[:day]).first
       else
-        @hour = student.hours.last
+        @hour = @student.hours.last
       end
     end
 
-    @hour.destroy
-
-    respond_to do |format|
-      format.html { redirect_to action: "index", params: params, notice: 'Hour was successfully destroyed.' }
-      format.json { head :no_content }
+    unless @hour.nil?
+      @hour.destroy
     end
 
   end

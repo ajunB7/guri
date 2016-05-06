@@ -4,6 +4,8 @@ Rails.application.routes.draw do
       get :add_hour
       get :delete_hour
       get :show_summary
+      get :paid_money
+      get :unpaid_money
     end
   end
 
