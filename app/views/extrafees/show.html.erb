@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @extrafee.name %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%= @extrafee.price %>
+</p>
+
+
+<%= link_to 'Edit', edit_student_extrafee_path(@extrafee.student, @extrafee) %> |
+<%= link_to 'Back', student_extrafees_path(@extrafee.student) %>

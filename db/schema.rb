@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505230717) do
+ActiveRecord::Schema.define(version: 20160506215347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "extrafees", force: :cascade do |t|
+    t.integer  "student_id"
+    t.string   "name"
+    t.decimal  "price",      precision: 8, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "hours", force: :cascade do |t|
     t.integer  "count"
@@ -41,4 +49,5 @@ ActiveRecord::Schema.define(version: 20160505230717) do
     t.datetime "updated_at",                         null: false
   end
 
+  add_foreign_key "extrafees", "students"
 end

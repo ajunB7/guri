@@ -1,0 +1,33 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
+<% @extrafee ||= student.extrafees.build %>
+
+<%= form_for([@extrafee.student, @extrafee], html: {role: :form, 'data-model' => 'extrafee'}) do |f| %>
+  <% if @extrafee.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@extrafee.errors.count, "error") %> prohibited this extrafee from being saved:</h2>
+
+      <ul>
+      <% @extrafee.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :item_Name, class: 'control-label' %><br />
+    <%= f.text_field :name, class: 'form-control' %>
+    <span class="help-block"></span>
+  </div>
+  <div class="form-group">
+    <%= f.label :price, class: 'control-label' %><br />
+    <%= f.text_field :price, class: 'form-control' %>
+    <span class="help-block"></span>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Submit', class: 'btn btn-default' %>
+    <%= link_to 'Back', students_path, class: 'btn btn-default' %>
+  </div>
+<% end %>

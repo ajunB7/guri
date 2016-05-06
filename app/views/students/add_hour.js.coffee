@@ -6,7 +6,8 @@ $ ->
 	# Month Hours
 	$(".total-hours-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText = parseFloat($(".total-hours-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText) + 1
 	# Month Money Made
-	$(".total-fee-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText = '$' + <%= @student.fee %> * (parseFloat($(".total-hours-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText))
+	console.log ".total-fee-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>"
+	$(".total-fee-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText = '$' + (<%= @student.fee %> + parseFloat($(".total-fee-<%= @student.id %>-<%= @day %>-<%= @month %>-<%= @year %>")[0].innerText.replace("$", "")))
 
 	# Hours Today
 	$(".total-today-hours-<%= @month %>-<%= @year %>")[0].innerText = 	parseFloat($(".total-today-hours-<%= @month %>-<%= @year %>")[0].innerText) + 1

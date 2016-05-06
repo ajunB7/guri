@@ -22,11 +22,13 @@
         <th class="text-center">Paid?</th>
         <th class="text-center">Name</th>
         <th class="text-center">Fee</th>
+        <th class="text-center">Extra Fees</th>
         <th class="text-center">Hours Today</th>
-        <th class="text-center">Money Made Today</th>
+        <th class="text-center">$ Today</th>
         <th class="text-center">Month Hours</th>
-        <th class="text-center">Month Money Made</th>
-        <th class="text-center" colspan="5"> Actions </th>
+        <th class="text-center">$ Month</th>
+        <th class="text-center">Hour</th>
+        <th class="text-center" colspan="4"> Actions </th>
       </tr>
     </thead>
 
@@ -43,11 +45,16 @@
         </td>
           <td><h3><%= student.name %></h3></td>
           <td>$<%= student.fee %></td>
+          <td><%= link_to "$#{@student_extra[student.id]}", "#new_extra_fee_modal-#{student.id}-#{@month}-#{@year}", 'data-toggle' => 'modal' %></td>
+
           <td class="today-hours today-hours-<%= student.id %>-<%= @day %>-<%= @month %>-<%= @year %>"><%= @today_hours[student.id] %></td>
           <td class='today-fee-<%= student.id %>-<%= @day %>-<%= @month %>-<%= @year %>'>$<%= student.fee * @today_hours[student.id] %></td>
           <td class='total-hours-<%= student.id %>-<%= @day %>-<%= @month %>-<%= @year %>'><%= @hours[student.id] %></td>
-          <td class='total-fee-<%= student.id %>-<%= @day %>-<%= @month %>-<%= @year %>'>$<%= student.fee * @hours[student.id] %></td>
-          <td><%= link_to 'Add Hour', add_hour_students_path(:student_id => student.id, :count => 1, :day => @day, :month => @month, :year => @year), remote: true,  :class => 'btn btn-success'%>  <%= link_to 'Remove Today\'s Hours', delete_hour_students_path(:student_id => student.id, :day => @day, :month => @month, :year => @year), remote: true,  :class => 'btn btn-danger'%></td>
+          <td class='total-fee-<%= student.id %>-<%= @day %>-<%= @month %>-<%= @year %>'>$<%= student.fee * @hours[student.id] + @student_extra[student.id] %></td>
+
+          <td><%= link_to '<i class="glyphicon glyphicon-plus"></i>'.html_safe, add_hour_students_path(:student_id => student.id, :count => 1, :day => @day, :month => @month, :year => @year), remote: true,  :class => 'btn btn-success'%>  <%= link_to '<i class="glyphicon glyphicon-minus"></i>'.html_safe, delete_hour_students_path(:student_id => student.id, :day => @day, :month => @month, :year => @year), remote: true,  :class => 'btn btn-danger'%></td>
+
+
           <td><%= link_to 'Show', student, :class => 'btn btn-primary'%></td>
           <td><%= link_to 'Edit', edit_student_path(student), :class => 'btn btn-warning' %></td>
           <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
@@ -57,14 +64,19 @@
         <td><h1>Total</h1></td>
         <td></td>
         <td></td>
+        <td></td>
         <td><strong class="total-today-hours-<%= @month %>-<%= @year %>"><%= @total_today_hours %></strong></td>
         <td><strong class="total-today-fee-<%= @month %>-<%= @year %>">$<%= @total_today_fee %></strong></td>
         <td><strong class="total-hours-<%= @month %>-<%= @year %>"><%= @total_hours %></strong></td>
         <td><strong class="total-fee-<%= @month %>-<%= @year %>">$<%= @total_fee %></strong></td>
-        <td colspan="4"></td>
+        <td colspan="5"></td>
       </tr>
     </tbody>
   </table>
+
+  <% @students.each do |s| %>
+     <%= render partial: 'extrafees/extrafee_modal', locals: {student: s, month: @month, year: @year} %>
+  <% end %>
 
   <br>
 

@@ -1,3 +1,6 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
 <%= form_for(@student) do |f| %>
   <% if @student.errors.any? %>
     <div id="error_explanation">
@@ -13,12 +16,12 @@
 <div class="student-form">
 
   <div class="form-group">
-    <%= f.label :name %>
+    <%= f.label :name, class: 'control-label'  %>
     <%= f.text_field :name, :class => 'form-control', :placeholder => 'Student Name' %>
   </div>
 
   <div class="form-group">
-    <%= f.label :fee %><br>
+    <%= f.label :fee, class: 'control-label'  %><br>
     <%= f.text_field :fee, :class => 'form-control',  :placeholder => '$' %>
   </div>
 

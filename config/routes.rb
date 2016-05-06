@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :students do
+    resources :extrafees
     collection do
       get :add_hour
       get :delete_hour

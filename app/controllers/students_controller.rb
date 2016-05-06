@@ -13,6 +13,7 @@ class StudentsController < ApplicationController
     @total_hours = 0
     @months_days = 0
     @paidfees = {}
+    @student_extra = {}
 
     @month = Time.now.month
     @year = Time.now.year
@@ -42,11 +43,14 @@ class StudentsController < ApplicationController
         @paidfees[s.id] = true
       end
 
+      extras = s.extrafees.where("date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", @month, @year).sum(:price)
+      @student_extra[s.id] = extras
+
       @today_hours[s.id] = hours_today_count
       @total_today_hours += hours_today_count
       @hours[s.id] = hours_count
       @total_hours += hours_count
-      @total_fee += hours_count * s.fee
+      @total_fee += hours_count * s.fee + extras
       @total_today_fee += hours_today_count * s.fee
     end
   end
@@ -126,7 +130,7 @@ class StudentsController < ApplicationController
   # POST /students
   # POST /students.json
   def create
-    @student = Student.new(student_params)
+  @student = Student.new(student_params)
 
    respond_to do |format|
       if @student.save
