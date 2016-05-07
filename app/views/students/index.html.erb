@@ -33,7 +33,7 @@
     </thead>
 
     <tbody>
-      <% @students.order("name").each do |student| %>
+      <% @students.each do |student| %>
         <tr align="center" class="student-<%= student.id %>">
         <td>
           <div class="btn-group">
