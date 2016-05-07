@@ -1,5 +1,7 @@
 class StudentsController < ApplicationController
+  before_filter :authenticate
   before_action :set_student, only: [:show, :edit, :update, :destroy]
+
 
   # GET /students
   # GET /students.json
@@ -233,4 +235,11 @@ class StudentsController < ApplicationController
     def student_params
       params.require(:student).permit(:name, :fee)
     end
+
+  protected
+  def authenticate
+    authenticate_or_request_with_http_basic do |username, password|
+      username == "gurvinder" && password == "gurvinder"
+    end
+  end
 end
