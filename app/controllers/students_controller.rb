@@ -17,9 +17,9 @@ class StudentsController < ApplicationController
     @paidfees = {}
     @student_extra = {}
 
-    @month = Time.now.month
-    @year = Time.now.year
-    @day = Time.now.day
+    @month = Time.zone.now.month
+    @year = Time.zone.now.year
+    @day = Time.zone.now.day
 
 
   # Student.first.hours.where("date_part('month', created_at) = 5 AND date_part('year', created_at) = 2016").order("created_at DESC")
@@ -97,9 +97,9 @@ class StudentsController < ApplicationController
   def add_hour
     @student = Student.find(params[:student_id])
 
-    @month = Time.now.month
-    @day = Time.now.day
-    @year = Time.now.year
+    @month = Time.zone.now.month
+    @day = Time.zone.now.day
+    @year = Time.zone.now.year
 
     if (params[:month] and params[:day] and params[:year])
       @month = params[:month]
@@ -224,6 +224,10 @@ class StudentsController < ApplicationController
     end
 
   end
+
+def logout
+  render :logout, status: 401
+end
 
   private
     # Use callbacks to share common setup or constraints between actions.

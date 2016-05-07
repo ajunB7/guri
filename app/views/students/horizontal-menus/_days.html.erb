@@ -9,7 +9,7 @@
                     <% i += 1 %>
                     <% if (i == @day.to_i) %>
                         <%= link_to i, students_path(:day => i, :month => @month, :year => @year), :class => 'list-group-item active'%>
-                    <% elsif (i != @day.to_i and i == Time.now.day and @month.to_i == Time.now.month and @year = Time.now.year) %>
+                    <% elsif (i != @day.to_i and i == Time.zone.now.day and @month.to_i == Time.zone.now.month and @year = Time.zone.now.year) %>
                         <%= link_to i, students_path(:day => i, :month => @month, :year => @year), :class => 'list-group-item list-group-item-info'%>
                     <% else %>
                         <%= link_to i, students_path(:day => i, :month => @month, :year => @year), :class => 'list-group-item'%>
