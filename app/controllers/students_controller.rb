@@ -17,6 +17,8 @@ class StudentsController < ApplicationController
     @paidfees = {}
     @student_extra = {}
 
+    @day_has_value = {}
+
     @month = Time.zone.now.month
     @year = Time.zone.now.year
     @day = Time.zone.now.day
@@ -33,6 +35,10 @@ class StudentsController < ApplicationController
     if params[:day]
       @day = params[:day]
       @day = @months_days if (@day.to_i > @months_days)
+    end
+
+    @months_days.times do |i|
+     @day_has_value[i + 1] = true unless Hour.where("date_part('day', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('month', created_at AT TIME ZONE 'Canada/Eastern') = ? AND date_part('year', created_at AT TIME ZONE 'Canada/Eastern') = ?", (i + 1), @month, @year).empty?
     end
 
     @students.each do |s|
