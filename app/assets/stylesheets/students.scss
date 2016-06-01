@@ -43,7 +43,7 @@ table thead {
 }
 
 table.tablesorter thead tr .header {
-	background-image: url(bg.gif);
+	background-image: asset-data-url("bg.gif");
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
@@ -54,10 +54,10 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 }
 
 table.tablesorter .headerSortUp {
-	background-image: url(asc.gif) !important;
+	background-image: asset-data-url("asc.gif") !important;
 	background-repeat: no-repeat;
 }
 table.tablesorter .headerSortDown {
-	background-image: url(desc.gif) !important;
+	background-image: asset-data-url("desc.gif") !important;
 	background-repeat: no-repeat;
 }
