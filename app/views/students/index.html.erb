@@ -17,9 +17,9 @@
   <a href="#" class="btn btn-default pull-right attended-students">Show Attended Students Today</a>
 
   <table class="table table-hover table-striped students-table tablesorter">
-    <thead>
+    <thead class="nowrap">
       <tr>
-        <th class="text-center">Paid?</th>
+        <th class="text-center toggle">Paid?</th>
         <th class="text-center">Name</th>
         <th class="text-center">Fee</th>
         <th class="text-center">Extra Fees</th>
@@ -27,7 +27,7 @@
         <th class="text-center">$ Today</th>
         <th class="text-center">Month Hours</th>
         <th class="text-center">$ Month</th>
-        <th class="text-center">Hour</th>
+        <th class="text-center toggle">Hour</th>
         <th class="text-center" colspan="4"> Actions </th>
       </tr>
     </thead>
@@ -44,8 +44,8 @@
     <tbody>
       <% @students.each do |student| %>
         <tr align="center" class="student-<%= student.id %>">
-        <td>
-          <div class="btn-group">
+        <td class="nowrap">
+          <div class="btn-group nowrap">
                 <% paid = @paidfees[student.id].nil? ? 'btn-default' : 'btn-success active' %>
                 <% unpaid = @paidfees[student.id].nil? ? 'btn-danger active' : 'btn-default' %>
                 <%= link_to '<i class="glyphicon glyphicon-ok"></i>'.html_safe, paid_money_students_path(:student_id => student.id, :month => @month, :year => @year), remote: true, class: "btn paid-#{student.id}-#{@month}-#{@year} #{paid}" %>

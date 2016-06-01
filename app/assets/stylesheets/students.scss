@@ -47,6 +47,11 @@ table.tablesorter thead tr .header {
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
+    padding-right: 1.8%;
+}
+
+.nowrap {
+   	white-space: nowrap;
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
@@ -60,4 +65,8 @@ table.tablesorter .headerSortUp {
 table.tablesorter .headerSortDown {
 	background-image: asset-data-url("desc.gif") !important;
 	background-repeat: no-repeat;
+}
+
+.toggle {
+	min-width: 100px !important;
 }
