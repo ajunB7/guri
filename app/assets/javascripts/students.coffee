@@ -23,3 +23,5 @@ jQuery ->
 		for studentHours in $(".today-hours")
 			studentHours.parentElement.className = ""
 	$('table').stickyTableHeaders()
+	$('table').tablesorter()
+

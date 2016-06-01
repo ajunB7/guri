@@ -16,7 +16,7 @@
   <a href="#" class="btn btn-default pull-right absent-students">Show Absent Students Today</a>
   <a href="#" class="btn btn-default pull-right attended-students">Show Attended Students Today</a>
 
-  <table class="table table-hover table-striped students-table">
+  <table class="table table-hover table-striped students-table tablesorter">
     <thead>
       <tr>
         <th class="text-center">Paid?</th>
@@ -31,7 +31,16 @@
         <th class="text-center" colspan="4"> Actions </th>
       </tr>
     </thead>
-
+    <tfoot>
+        <tr align="center" class="total-info" style="background-color: #36DC71">
+          <td colspan="4"><h1>Total - <%= @students.count %> Students</h1></td>
+          <td><strong class="total-today-hours-<%= @month %>-<%= @year %>"><%= @total_today_hours %></strong></td>
+          <td><strong class="total-today-fee-<%= @month %>-<%= @year %>">$<%= @total_today_fee %></strong></td>
+          <td><strong class="total-hours-<%= @month %>-<%= @year %>"><%= @total_hours %></strong></td>
+          <td><strong class="total-fee-<%= @month %>-<%= @year %>">$<%= @total_fee %></strong></td>
+          <td colspan="5"></td>
+        </tr>
+    </tfoot>
     <tbody>
       <% @students.each do |student| %>
         <tr align="center" class="student-<%= student.id %>">
@@ -60,14 +69,6 @@
           <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
         </tr>
       <% end %>
-      <tr align="center" class="total-info" style="background-color: #36DC71">
-        <td colspan="4"><h1>Total - <%= @students.count %> Students</h1></td>
-        <td><strong class="total-today-hours-<%= @month %>-<%= @year %>"><%= @total_today_hours %></strong></td>
-        <td><strong class="total-today-fee-<%= @month %>-<%= @year %>">$<%= @total_today_fee %></strong></td>
-        <td><strong class="total-hours-<%= @month %>-<%= @year %>"><%= @total_hours %></strong></td>
-        <td><strong class="total-fee-<%= @month %>-<%= @year %>">$<%= @total_fee %></strong></td>
-        <td colspan="5"></td>
-      </tr>
     </tbody>
   </table>
 

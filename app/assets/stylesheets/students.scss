@@ -37,7 +37,27 @@ td {
 }
 
 table thead {
-  border-top: none;
-  border-bottom: none;
-  background-color: #FFF;
+	border-top: none;
+	border-bottom: none;
+	background-color: #FFF;
+}
+
+table.tablesorter thead tr .header {
+	background-image: url(bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+	background-color: #d9edf7;
+}
+
+table.tablesorter .headerSortUp {
+	background-image: url(asc.gif) !important;
+	background-repeat: no-repeat;
+}
+table.tablesorter .headerSortDown {
+	background-image: url(desc.gif) !important;
+	background-repeat: no-repeat;
 }

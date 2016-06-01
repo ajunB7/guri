@@ -16,4 +16,5 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require jquery.stickytableheaders.min
+//= require jquery.tablesorter.min
 //= require_tree .
